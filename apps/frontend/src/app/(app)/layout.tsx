@@ -24,9 +24,6 @@ const chakra = Chakra_Petch({
 });
 export default async function AppLayout({ children }: { children: ReactNode }) {
   const allHeaders = headers();
-  const Plausible = !!process.env.STRIPE_PUBLISHABLE_KEY
-    ? PlausibleProvider
-    : Fragment;
   return (
     <html className={interClass}>
       <head>
@@ -58,9 +55,21 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
         >
           <ToltScript />
           <FacebookComponent />
-          <Plausible
-            domain={!!process.env.IS_GENERAL ? 'postiz.com' : 'gitroom.com'}
-          >
+          {!!process.env.STRIPE_PUBLISHABLE_KEY ? (
+            <PlausibleProvider
+              domain={!!process.env.IS_GENERAL ? 'andevergreen.com' : 'gitroom.com'}
+            >
+              <PHProvider
+                phkey={process.env.NEXT_PUBLIC_POSTHOG_KEY}
+                host={process.env.NEXT_PUBLIC_POSTHOG_HOST}
+              >
+                <LayoutContext>
+                  <UtmSaver />
+                  {children}
+                </LayoutContext>
+              </PHProvider>
+            </PlausibleProvider>
+          ) : (
             <PHProvider
               phkey={process.env.NEXT_PUBLIC_POSTHOG_KEY}
               host={process.env.NEXT_PUBLIC_POSTHOG_HOST}
@@ -70,7 +79,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
                 {children}
               </LayoutContext>
             </PHProvider>
-          </Plausible>
+          )}
         </VariableContextComponent>
       </body>
     </html>

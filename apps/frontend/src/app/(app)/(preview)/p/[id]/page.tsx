@@ -12,7 +12,7 @@ import { CopyClient } from '@gitroom/frontend/components/preview/copy.client';
 import { getT } from '@gitroom/react/translation/get.translation.service.backend';
 dayjs.extend(utc);
 export const metadata: Metadata = {
-  title: `${isGeneralServerSide() ? 'Postiz' : 'Gitroom'} Preview`,
+  title: `${isGeneralServerSide() ? '&Evergreen' : 'Gitroom'} Preview`,
   description: '',
 };
 export default async function Auth({
@@ -48,10 +48,10 @@ export default async function Auth({
                 >
                   <div className="max-w-[55px]">
                     <Image
-                      src={'/postiz.svg'}
+                      src={'/evergreen.svg'}
                       width={55}
                       height={55}
-                      alt="Logo"
+                      alt="&Evergreen Logo"
                     />
                   </div>
                   <div>

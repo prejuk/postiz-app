@@ -80,8 +80,18 @@ class CloudflareStorage implements IUploadProvider {
   }
 
   async uploadFile(file: Express.Multer.File): Promise<any> {
+    console.log('🚀 CloudflareStorage.uploadFile called with:', {
+      originalname: file.originalname,
+      mimetype: file.mimetype,
+      size: file.size,
+      bucketName: this._bucketName,
+      uploadUrl: this._uploadUrl
+    });
+
     const id = makeId(10);
     const extension = mime.extension(file.mimetype) || '';
+
+    console.log('📦 Generated file ID and extension:', { id, extension });
 
     // Create the PutObjectCommand to upload the file to Cloudflare R2
     const command = new PutObjectCommand({
@@ -91,9 +101,17 @@ class CloudflareStorage implements IUploadProvider {
       Body: file.buffer,
     });
 
-    await this._client.send(command);
+    console.log('📤 Sending file to Cloudflare R2...');
+    
+    try {
+      await this._client.send(command);
+      console.log('✅ File uploaded successfully to Cloudflare R2');
+    } catch (error) {
+      console.error('❌ Failed to upload to Cloudflare R2:', error);
+      throw error;
+    }
 
-    return {
+    const result = {
       filename: `${id}.${extension}`,
       mimetype: file.mimetype,
       size: file.size,
@@ -105,6 +123,10 @@ class CloudflareStorage implements IUploadProvider {
       encoding: '7bit',
       stream: file.buffer as any,
     };
+
+    console.log('🎯 Returning upload result:', { path: result.path });
+    
+    return result;
   }
 
   // Implement the removeFile method from IUploadProvider

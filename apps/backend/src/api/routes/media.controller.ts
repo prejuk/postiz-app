@@ -78,7 +78,20 @@ export class MediaController {
     @GetOrgFromRequest() org: Organization,
     @UploadedFile() file: Express.Multer.File
   ) {
+    console.log('📥 MediaController.uploadServer called with file:', {
+      originalname: file?.originalname,
+      mimetype: file?.mimetype,
+      size: file?.size
+    });
+    
     const uploadedFile = await this.storage.uploadFile(file);
+    
+    console.log('💾 Saving file to database:', {
+      orgId: org.id,
+      originalname: uploadedFile.originalname,
+      path: uploadedFile.path
+    });
+    
     return this._mediaService.saveFile(
       org.id,
       uploadedFile.originalname,
@@ -107,6 +120,9 @@ export class MediaController {
     @Res() res: Response,
     @Param('endpoint') endpoint: string
   ) {
+    console.log('🔀 MediaController multipart upload endpoint called:', endpoint);
+    console.log('📤 Request body keys:', Object.keys(req.body));
+    
     const upload = await handleR2Upload(endpoint, req, res);
     if (endpoint !== 'complete-multipart-upload') {
       return upload;
@@ -114,6 +130,12 @@ export class MediaController {
 
     // @ts-ignore
     const name = upload.Location.split('/').pop();
+
+    console.log('💾 Saving multipart upload to database:', {
+      orgId: org.id,
+      filename: name,
+      location: (upload as any).Location
+    });
 
     const saveFile = await this._mediaService.saveFile(
       org.id,

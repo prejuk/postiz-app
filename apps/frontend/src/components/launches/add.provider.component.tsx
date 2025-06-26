@@ -345,6 +345,15 @@ export const AddProviderComponent: FC<{
         }>
       ) =>
       async () => {
+        console.log('🔍 [DEBUG] LinkedIn button clicked!', {
+          identifier,
+          isExternal,
+          isWeb3,
+          customFields,
+          hasModal: !!modal,
+          hasFetch: !!fetch,
+          hasToaster: !!toaster
+        });
         const openWeb3 = async () => {
           const { component: Web3Providers } = web3List.find(
             (item) => item.identifier === identifier
@@ -370,18 +379,45 @@ export const AddProviderComponent: FC<{
           return;
         };
         const gotoIntegration = async (externalUrl?: string) => {
-          const { url, err } = await (
-            await fetch(
+          console.log('🚀 [DEBUG] Making API call to:', `/integrations/social/${identifier}`, { externalUrl });
+          try {
+            const response = await fetch(
               `/integrations/social/${identifier}${
                 externalUrl ? `?externalUrl=${externalUrl}` : ``
               }`
-            )
-          ).json();
-          if (err) {
-            toaster.show('Could not connect to the platform', 'warning');
-            return;
+            );
+            console.log('📊 [DEBUG] API response status:', response.status);
+            console.log('📊 [DEBUG] API response ok:', response.ok);
+            
+            if (!response.ok) {
+              console.error('❌ [DEBUG] HTTP Error:', response.status, response.statusText);
+              const errorText = await response.text();
+              console.error('❌ [DEBUG] Error response body:', errorText);
+              toaster.show(`HTTP Error: ${response.status}`, 'error');
+              return;
+            }
+            
+            const data = await response.json();
+            console.log('📦 [DEBUG] API response data:', data);
+            
+            if (data.err) {
+              console.error('❌ [DEBUG] API returned error:', data.err);
+              toaster.show('Could not connect to the platform', 'warning');
+              return;
+            }
+            
+            if (!data.url) {
+              console.error('❌ [DEBUG] No URL in response:', data);
+              toaster.show('No redirect URL received', 'error');
+              return;
+            }
+            
+            console.log('🔗 [DEBUG] Redirecting to:', data.url);
+            window.location.href = data.url;
+          } catch (error) {
+            console.error('🚨 [DEBUG] Network error:', error);
+            toaster.show(`Network error: ${error.message}`, 'error');
           }
-          window.location.href = url;
         };
         if (isWeb3) {
           openWeb3();
