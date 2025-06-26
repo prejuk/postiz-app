@@ -11,7 +11,7 @@ import { ShowAllProviders } from '@gitroom/frontend/components/new-launch/provid
 import { useExistingData } from '@gitroom/frontend/components/launches/helpers/use.existing.data';
 import { useLaunchStore } from '@gitroom/frontend/components/new-launch/store';
 import { DatePicker } from '@gitroom/frontend/components/launches/helpers/date.picker';
-import { useShallow } from 'zustand/react/shallow';
+import { useShallow } from 'zustand/shallow';
 import { RepeatComponent } from '@gitroom/frontend/components/launches/repeat.component';
 import { TagsComponent } from '@gitroom/frontend/components/launches/tags.component';
 import { Button } from '@gitroom/react/form/button';

@@ -7,7 +7,7 @@ import { FC, useEffect } from 'react';
 import { makeId } from '@gitroom/nestjs-libraries/services/make.is';
 import { ManageModal } from '@gitroom/frontend/components/new-launch/manage.modal';
 import { Integrations } from '@gitroom/frontend/components/launches/calendar.context';
-import { useShallow } from 'zustand/react/shallow';
+import { useShallow } from 'zustand/shallow';
 import { useExistingData } from '@gitroom/frontend/components/launches/helpers/use.existing.data';
 
 export interface AddEditModalProps {

@@ -4,7 +4,7 @@ import { FC } from 'react';
 import clsx from 'clsx';
 import Image from 'next/image';
 import { useLaunchStore } from '@gitroom/frontend/components/new-launch/store';
-import { useShallow } from 'zustand/react/shallow';
+import { useShallow } from 'zustand/shallow';
 import { useExistingData } from '@gitroom/frontend/components/launches/helpers/use.existing.data';
 
 export const PicksSocialsComponent: FC<{ toolTip?: boolean }> = ({
