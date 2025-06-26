@@ -4,6 +4,7 @@
 
 [build]
 builder = "NIXPACKS"
+buildCommand = "pnpm install && npm install -g pm2 && pnpm run build"
 
 [deploy]
 startCommand = "pnpm run pm2"
