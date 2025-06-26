@@ -393,7 +393,7 @@ export const AddProviderComponent: FC<{
               console.error('❌ [DEBUG] HTTP Error:', response.status, response.statusText);
               const errorText = await response.text();
               console.error('❌ [DEBUG] Error response body:', errorText);
-              toaster.show(`HTTP Error: ${response.status}`, 'error');
+              toaster.show(`HTTP Error: ${response.status}`, 'warning');
               return;
             }
             
@@ -408,7 +408,7 @@ export const AddProviderComponent: FC<{
             
             if (!data.url) {
               console.error('❌ [DEBUG] No URL in response:', data);
-              toaster.show('No redirect URL received', 'error');
+              toaster.show('No redirect URL received', 'warning');
               return;
             }
             
@@ -416,7 +416,7 @@ export const AddProviderComponent: FC<{
             window.location.href = data.url;
           } catch (error) {
             console.error('🚨 [DEBUG] Network error:', error);
-            toaster.show(`Network error: ${error.message}`, 'error');
+            toaster.show(`Network error: ${(error as Error).message}`, 'warning');
           }
         };
         if (isWeb3) {
