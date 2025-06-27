@@ -3,8 +3,8 @@
     aptPkgs = ['build-essential', 'libudev-dev']
 
 [build]
-builder = "NIXPACKS"
-buildCommand = "pnpm install && npm install -g pm2 && pnpm run build"
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile.dev"
 
 [deploy]
 startCommand = "pnpm run pm2"
